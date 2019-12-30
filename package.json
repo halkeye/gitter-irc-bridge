@@ -14,20 +14,19 @@
   "author": "The Gitter Team",
   "license": "MIT",
   "dependencies": {
-    "@gitterhq/env": "^0.42.0",
-    "bluebird": "^3.4.1",
-    "carrier": "^0.1.14",
-    "debug": "^2.1.1",
-    "eventemitter3": "^0.1.6",
-    "express": "^4.12.0",
-    "irc-message": "^2.0.1",
-    "jade": "^1.9.2",
-    "lru-cache": "^4.0.1",
-    "node-gitter": "^2.0.5",
-    "uuid": "^2.0.1"
+    "bluebird": "^3.7.2",
+    "carrier": "^0.3.0",
+    "debug": "^4.1.1",
+    "eventemitter3": "^4.0.0",
+    "express": "^4.17.1",
+    "irc-message": "^3.0.2",
+    "jade": "^1.11.0",
+    "lru-cache": "^5.1.1",
+    "node-gitter": "^2.1.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "mocha": "^6.2.2",
-    "sinon": "^1.12.2"
+    "sinon": "^8.0.1"
   }
 }
