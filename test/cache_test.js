@@ -1,22 +1,22 @@
-'use strict';
 
-var assert = require('assert');
-var Promise = require('bluebird');
-var Cache = require('../lib/cache');
+
+const assert = require('assert');
+const Promise = require('bluebird');
+const Cache = require('../lib/cache');
 
 
 
 describe('Cache', function() {
 
   describe('static map', function() {
-    var cache;
-    var backingStore;
+    let cache;
+    let backingStore;
     beforeEach(function() {
       backingStore = {
         foo: 'bar',
         ping: 'pong'
       };
-      var staticMapCacheDelegate = {
+      const staticMapCacheDelegate = {
         get: function(key, fetchFn) {
           return Promise.resolve(backingStore[key]);
         }
@@ -26,7 +26,7 @@ describe('Cache', function() {
     });
 
     it('should retrieve value from `.get`', async function() {
-      var retrieveValuePromise = cache.get('foo', function() { });
+      const retrieveValuePromise = cache.get('foo', function() { });
 
       const val = await retrieveValuePromise;
       assert.equal(val, 'bar');
@@ -34,11 +34,11 @@ describe('Cache', function() {
   });
 
   describe('local map', function() {
-    var cache;
-    var backingStore;
+    let cache;
+    let backingStore;
     beforeEach(function() {
       backingStore = {};
-      var localMapCacheDelegate = {
+      const localMapCacheDelegate = {
         get: function(key, fetchFn) {
           return Promise.resolve(backingStore[key] || fetchFn().then(function(newVal) {
             backingStore[key] = newVal;
@@ -51,8 +51,8 @@ describe('Cache', function() {
     });
 
     it('should fill in cache from fetchFn when empty', async function() {
-      var expectedValue = 'bar';
-      var retrieveValuePromise = cache.get('foo', function() {
+      const expectedValue = 'bar';
+      const retrieveValuePromise = cache.get('foo', function() {
         return Promise.resolve(expectedValue);
       });
 
@@ -63,8 +63,8 @@ describe('Cache', function() {
     });
 
     it('should retrieve same value from cache', async function() {
-      var expectedValue = 'bar';
-      var retrieveValuePromise = cache.get('foo', function() {
+      const expectedValue = 'bar';
+      const retrieveValuePromise = cache.get('foo', function() {
         return Promise.resolve(expectedValue);
       });
 

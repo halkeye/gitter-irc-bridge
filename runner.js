@@ -1,10 +1,10 @@
 /* jshint unused:true, node:true */
-"use strict";
 
-var IRCPORT = process.env.IRCPORT || 6667;
-var WEBPORT = process.env.WEBPORT || 4567;
 
-var Server   = require('./lib/server');
+const IRCPORT = process.env.IRCPORT || 6667;
+const WEBPORT = process.env.WEBPORT || 4567;
 
-var server = new Server();
+const Server   = require('./lib/server');
+
+const server = new Server();
 server.start({irc: IRCPORT, web: WEBPORT});

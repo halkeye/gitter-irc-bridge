@@ -1,17 +1,17 @@
-var express = require('express');
+const express = require('express');
 
-var debug = require('debug')('irc-dashboard');
-var app = express();
+const debug = require('debug')('irc-dashboard');
+const app = express();
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
-app.get('/', function(req,res) {
-  var clients = Object.keys(app.irc.clients).map(function(uuid) { return app.irc.clients[uuid]; });
+app.get('/', function(req, res) {
+  const clients = Object.keys(app.irc.clients).map(function(uuid) { return app.irc.clients[uuid]; });
   res.render('clients', {clients: clients});
 });
 
-app.get('/users/:uuid', function(req,res) {
-  var client = app.irc.clients[req.params.uuid];
+app.get('/users/:uuid', function(req, res) {
+  const client = app.irc.clients[req.params.uuid];
   if (!client) return res.status(404).send('Not Found');
   res.render('client', {client: client});
 });

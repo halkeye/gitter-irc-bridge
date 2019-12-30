@@ -1,15 +1,15 @@
-var assert  = require('assert');
-var net     = require('net');
+const assert  = require('assert');
+const net     = require('net');
 
-var Server = require('../lib/server.js');
+const Server = require('../lib/server.js');
 
-var rnd = function() { return Math.floor(Math.random() * 900); };
+const rnd = function() { return Math.floor(Math.random() * 900); };
 
-var IRCPORT = 15000 + rnd();
-var WEBPORT = 15000 + rnd();
+const IRCPORT = 15000 + rnd();
+const WEBPORT = 15000 + rnd();
 
-describe('Server', function(){
-  var server;
+describe('Server', function() {
+  let server;
 
   before(function(done) {
     server = new Server();
@@ -21,7 +21,7 @@ describe('Server', function(){
   });
 
   it('should allow keep an index of connected clients', function(done) {
-    var client = net.connect({port: IRCPORT});
+    const client = net.connect({port: IRCPORT});
 
     client.on('connect', function() {
       setTimeout(function() {
@@ -38,7 +38,7 @@ describe('Server', function(){
   });
 
   it('should cleanup after a client disconnects', function(done) {
-    var client = net.connect({port: IRCPORT});
+    const client = net.connect({port: IRCPORT});
 
     client.on('connect', client.end);
 

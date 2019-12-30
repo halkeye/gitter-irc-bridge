@@ -1,5 +1,5 @@
-var assert = require('assert');
-var chunkString = require('../lib/chunk-string');
+const assert = require('assert');
+const chunkString = require('../lib/chunk-string');
 
 describe('chunk-string', function() {
   it('should not mangle anything below the threshold size', function() {
