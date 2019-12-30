@@ -68,16 +68,13 @@ describe('Cache', function() {
         return Promise.resolve(expectedValue);
       });
 
-      const val = await retrieveValuePromise
-        .then(function(val) {
-          assert.equal(val, expectedValue);
-          assert.deepEqual(backingStore, { foo: 'bar' });
-        })
-        .then(function() {
-          return cache.get('foo', function() {
-            return Promise.resolve('oops');
-          });
-        });
+      const val2 = await retrieveValuePromise;
+      assert.equal(val2, expectedValue);
+      assert.deepEqual(backingStore, { foo: 'bar' });
+
+      const val = await cache.get('foo', function() {
+        return Promise.resolve('oops');
+      });
 
       assert.equal(val, expectedValue);
       assert.deepEqual(backingStore, { foo: 'bar' });
