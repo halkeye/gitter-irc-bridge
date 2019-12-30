@@ -1,5 +1,4 @@
 const assert  = require('assert');
-const events  = require('events');
 const net     = require('net');
 const sinon   = require('sinon');
 
@@ -15,11 +14,17 @@ describe('Gitter Adapter', function() {
     adapter = new Adapter(client);
   });
 
+  afterEach(function() {
+    client._teardown();
+    client.socket.end();
+    socket.destroy();
+  });
+
   it('should ignore NICK and return Gitter nick', function() {
     client.authenticated = true;
     client.nick = 'bar'; // obtained after auth
     const spy = sinon.spy();
-    const stub = sinon.stub(socket, 'write', spy);
+    sinon.stub(socket, 'write').callsFake(spy);
     client.parse('NICK foo');
     assert(spy.calledWith(":bar!bar@irc.gitter.im NICK :bar\r\n"));
   });
@@ -28,7 +33,7 @@ describe('Gitter Adapter', function() {
     client.authenticated = true;
     client.nick = 'bar'; // obtained after auth
     const spy = sinon.spy();
-    const stub = sinon.stub(socket, 'write', spy);
+    sinon.stub(socket, 'write').callsFake(spy);
     client.parse('WHO');
     assert(spy.calledWith(":bar!bar@irc.gitter.im WHO :\r\n"));
   });
@@ -37,7 +42,7 @@ describe('Gitter Adapter', function() {
     client.authenticated = true;
     client.nick = 'bar'; // obtained after auth
     const spy = sinon.spy();
-    const stub = sinon.stub(socket, 'write', spy);
+    sinon.stub(socket, 'write').callsFake(spy);
     client.parse('WHO bar');
     assert(spy.calledWith(":bar!bar@irc.gitter.im WHO :bar\r\n"));
   });

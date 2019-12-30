@@ -9,7 +9,7 @@ const Client = require('../lib/client.js');
 // https://tools.ietf.org/html/rfc2812#section-2.3
 const MESSAGE_MAX_LENGTH = 512;
 // 512 - CR - LF
-const MESSAGE_PIECE_MAX_LENGTH = 510;
+const MESSAGE_PIECE_MAX_LENGTH = MESSAGE_MAX_LENGTH - 2;
 
 const stringRepeat = function(str, num) {
   return Array(num + 1).join(str);
@@ -18,15 +18,25 @@ const stringRepeat = function(str, num) {
 
 
 describe('Client', function() {
+  let socket;
+  let client;
+  beforeEach(function() {
+    socket = new net.Socket();
+  });
+
+  afterEach(function() {
+    client._teardown();
+    client.socket.end();
+    socket.destroy();
+  });
+
   it('should be an event emitter', function() {
-    const socket = new net.Socket();
-    const client = new Client(socket);
+    client = new Client(socket);
     assert(client instanceof EventEmitter);
   });
 
   it('should emit PASS command even if not authenticated', function(done) {
-    const socket = new net.Socket();
-    const client = new Client(socket);
+    client = new Client(socket);
 
     client.on('PASS', function(channels) {
       done();
@@ -37,8 +47,7 @@ describe('Client', function() {
 
 
   it('should emit after parsing an IRC message', function(done) {
-    const socket = new net.Socket();
-    const client = new Client(socket);
+    client = new Client(socket);
     client.authenticated = true;
 
     client.on('JOIN', function(channels) {
@@ -49,29 +58,26 @@ describe('Client', function() {
   });
 
   it('should send valid messages', function(done) {
-    const socket = new net.Socket();
-    const stub = sinon.stub(socket, 'write', function(msg) {
+    sinon.stub(socket, 'write').callsFake(function(msg) {
       assert(msg === "PING hostname host\r\n");
       done();
     });
 
-    const client = new Client(socket);
+    client = new Client(socket);
     client.send('PING', 'hostname', 'host');
   });
 
   it('should shutdown properly', function() {
-    const socket = new net.Socket();
     const spy = sinon.spy();
-    const stub = sinon.stub(socket, 'end', spy);
-    const client = new Client(socket);
+    sinon.stub(socket, 'end').callsFake(spy);
+    client = new Client(socket);
 
     client.disconnect();
     sinon.assert.called(spy);
   });
 
   it('should process queue after authenticated', function() {
-    const socket = new net.Socket();
-    const client = new Client(socket);
+    client = new Client(socket);
     const spy = sinon.spy();
 
     client.parse('NICK foo');
@@ -82,8 +88,7 @@ describe('Client', function() {
   });
 
   it('should split long normal messages', function(done) {
-    const socket = new net.Socket();
-    const client = new Client(socket);
+    client = new Client(socket);
 
     const prefixes = ':source PRIVMSG target :';
 
@@ -103,21 +108,20 @@ describe('Client', function() {
     ];
 
     let incomingMessageIndex = 0;
-    const stub = sinon.stub(socket, 'write', function(incomingMessage) {
+    sinon.stub(socket, 'write').callsFake(function(incomingMessage) {
       assert.equal(incomingMessage, prefixes + expectedIncomingMessages[incomingMessageIndex] + '\r\n');
       if (incomingMessageIndex === expectedIncomingMessages.length - 1) {
         done();
       }
 
-      incomingMessageIndex++;
+      incomingMessageIndex += 1;
     });
 
     client.send(':source', 'PRIVMSG', 'target', ':' + message);
   });
 
   it('should split long messages without spaces', function(done) {
-    const socket = new net.Socket();
-    const client = new Client(socket);
+    client = new Client(socket);
 
     const prefixes = ':source PRIVMSG target :';
 
@@ -145,13 +149,13 @@ describe('Client', function() {
     ];
 
     let incomingMessageIndex = 0;
-    const stub = sinon.stub(socket, 'write', function(incomingMessage) {
+    sinon.stub(socket, 'write').callsFake(function(incomingMessage) {
       assert.equal(incomingMessage, prefixes + expectedIncomingMessages[incomingMessageIndex] + '\r\n');
       if (incomingMessageIndex === expectedIncomingMessages.length - 1) {
         done();
       }
 
-      incomingMessageIndex++;
+      incomingMessageIndex += 1;
     });
 
     client.send(':source', 'PRIVMSG', 'target', ':' + message);

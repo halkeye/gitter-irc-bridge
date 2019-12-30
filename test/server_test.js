@@ -17,7 +17,9 @@ describe('Server', function() {
   });
 
   after(function(done) {
-    server.stop(done);
+    server.stop(() => {
+      done();
+    });
   });
 
   it('should allow keep an index of connected clients', function(done) {
@@ -40,11 +42,14 @@ describe('Server', function() {
   it('should cleanup after a client disconnects', function(done) {
     const client = net.connect({port: IRCPORT});
 
-    client.on('connect', client.end);
+    client.on('connect', () => {
+      client.end();
+    });
 
-    client.on('data', function() {});
+    client.on('data', () => {
+    });
 
-    client.on('close', function() {
+    client.on('close', () => {
       assert.equal(0, Object.keys(server.clients).length);
       done();
     });
