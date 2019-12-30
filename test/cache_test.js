@@ -25,13 +25,11 @@ describe('Cache', function() {
       cache = new Cache(staticMapCacheDelegate);
     });
 
-    it('should retrieve value from `.get`', function() {
+    it('should retrieve value from `.get`', async function() {
       var retrieveValuePromise = cache.get('foo', function() { });
 
-      return retrieveValuePromise
-        .then(function(val) {
-          assert.equal(val, 'bar');
-        });
+      const val = await retrieveValuePromise;
+      assert.equal(val, 'bar');
     });
   });
 
@@ -52,27 +50,25 @@ describe('Cache', function() {
       cache = new Cache(localMapCacheDelegate);
     });
 
-    it('should fill in cache from fetchFn when empty', function() {
+    it('should fill in cache from fetchFn when empty', async function() {
       var expectedValue = 'bar';
       var retrieveValuePromise = cache.get('foo', function() {
         return Promise.resolve(expectedValue);
       });
 
       assert.deepEqual(backingStore, { });
-      return retrieveValuePromise
-        .then(function(val) {
-          assert.equal(val, expectedValue);
-          assert.deepEqual(backingStore, { foo: 'bar' });
-        });
+      const val = await retrieveValuePromise;
+      assert.equal(val, expectedValue);
+      assert.deepEqual(backingStore, { foo: 'bar' });
     });
 
-    it('should retrieve same value from cache', function() {
+    it('should retrieve same value from cache', async function() {
       var expectedValue = 'bar';
       var retrieveValuePromise = cache.get('foo', function() {
         return Promise.resolve(expectedValue);
       });
 
-      return retrieveValuePromise
+      const val = await retrieveValuePromise
         .then(function(val) {
           assert.equal(val, expectedValue);
           assert.deepEqual(backingStore, { foo: 'bar' });
@@ -81,11 +77,10 @@ describe('Cache', function() {
           return cache.get('foo', function() {
             return Promise.resolve('oops');
           });
-        })
-        .then(function(val) {
-          assert.equal(val, expectedValue);
-          assert.deepEqual(backingStore, { foo: 'bar' });
         });
+
+      assert.equal(val, expectedValue);
+      assert.deepEqual(backingStore, { foo: 'bar' });
     });
   });
 });
