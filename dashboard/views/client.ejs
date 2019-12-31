@@ -1,0 +1,13 @@
+<% include('./partials/head') %>
+
+<div class="container">
+  <h1><%= client.nick %></h1>
+  <h4>Latest events</h4>
+  <ul>
+    <% Object.keys(client.stats).forEach(function(key) { %>
+      <li><b><%= key %></b> |: <%= client.stats[key] %></li>
+    <% }) %>
+  </ul>
+</div>
+
+<% include('./partials/foot') %>

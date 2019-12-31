@@ -1,8 +1,5 @@
-/* jshint unused:true, node:true */
-
-
-const IRCPORT = process.env.IRCPORT || 6667;
-const WEBPORT = process.env.WEBPORT || 4567;
+const IRCPORT = parseInt(process.env.IRCPORT || "6667", 10);
+const WEBPORT = parseInt(process.env.WEBPORT || "4567", 10);
 
 const Server   = require('./lib/server');
 

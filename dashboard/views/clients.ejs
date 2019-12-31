@@ -1,0 +1,14 @@
+<% include('./partials/head') %>
+
+<div class="container">
+  <h1>Clients connected</h1>
+  <ul>
+    <% clients.forEach(function(client) { %>
+      <li>
+        <a href="/users/<%= client.uuid %>"><%= client.nick %></a>
+      </li>
+    <% }) %>
+  </ul>
+</div>
+
+<% include('./partials/foot') %>
