@@ -2,8 +2,8 @@ const assert  = require('assert');
 const net     = require('net');
 const sinon   = require('sinon');
 
-const Client = require('../lib/client.js');
-const Adapter = require('../lib/gitter-adapter.js');
+const Client = require('../../lib/client.js');
+const Adapter = require('../../lib/gitter-adapter.js');
 
 describe('Gitter Adapter', function() {
   let socket, client, adapter;

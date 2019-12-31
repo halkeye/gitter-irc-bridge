@@ -4,9 +4,7 @@ module.exports = {
         "es6": true,
         "node": true
     },
-    extends: [
-      'standard'
-    ],
+    extends: ['standard'],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -18,11 +16,11 @@ module.exports = {
         {
             'env': {'mocha': true},
             'extends': ['plugin:mocha/recommended'],
-            'files': [
-                'test/**/*.js'
-            ],
+            'files': ['test/**/*.js'],
             'plugins': ['mocha'],
-            'rules': {}
+            'rules': {
+              "prefer-arrow-callback": "off"
+            }
         }
     ],
     "rules": {
@@ -248,7 +246,7 @@ module.exports = {
         "operator-linebreak": "error",
         "padded-blocks": "off",
         "padding-line-between-statements": "error",
-        "prefer-arrow-callback": "off",
+        "prefer-arrow-callback": "error",
         "prefer-const": "error",
         "prefer-destructuring": "off",
         "prefer-exponentiation-operator": "error",
